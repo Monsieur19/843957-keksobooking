@@ -6,7 +6,12 @@ var ARRAY_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'co
 var ARRAY_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 document.querySelector('.map').classList.remove('map--faded');
-
+var typeHouse = {
+  flat: 'Квартира',
+  palace: 'Дворец',
+  house: 'Дом',
+  bungalo: 'Бунгало'
+};
 var randomInteger = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
   rand = Math.round(rand);
@@ -93,7 +98,7 @@ var renderCard = function (arr) {
     customerElement.querySelector('.popup__title').textContent = arr[i].offer.title;
     customerElement.querySelector('.popup__text--address').textContent = arr[i].offer.address;
     customerElement.querySelector('.popup__text--price').textContent = arr[i].offer.price + '₽/ночь';
-    customerElement.querySelector('.popup__type').textContent = arr[i].offer.type;
+    customerElement.querySelector('.popup__type').textContent = typeHouse[arr[i].offer.type];
     customerElement.querySelector('.popup__text--capacity').textContent = arr[i].offer.rooms + ' комнаты для ' + arr[i].offer.guests + ' гостей';
     customerElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + arr[i].offer.checkin + ', выезд до ' + arr[i].offer.checkout;
     customerElement.querySelector('.popup__features').innerHTML = '';
