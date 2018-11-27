@@ -65,7 +65,6 @@ var createCustomer = function () {
       y: pointY
     }
   };
-  obj.offer.address = obj.location.x + ', ' + obj.location.y;
   return obj;
 };
 var getAmountCustomers = function (count) {
