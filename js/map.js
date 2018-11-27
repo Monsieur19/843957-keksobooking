@@ -12,15 +12,15 @@ var typeHouse = {
   house: 'Дом',
   bungalo: 'Бунгало'
 };
-var randomInteger = function (min, max) {
+var getRandomIntegerFromInterval = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
   rand = Math.round(rand);
   return rand;
 };
-var randomElement = function (arr) {
-  return arr[randomInteger(0, arr.length - 1)];
+var getRandomElement = function (arr) {
+  return arr[getRandomIntegerFromInterval(0, arr.length - 1)];
 };
-var randomAmountElement = function (arr) {
+var getRandomAmountElement = function (arr) {
   var array = [];
   var index = 0;
   for (var i = 0; i < arr.length; i++) {
@@ -41,38 +41,40 @@ var shuffleArray = function (array) {
   return array;
 };
 var createCustomer = function () {
+  var pointX = getRandomIntegerFromInterval(0, document.querySelector('.map').offsetWidth) - document.querySelector('.map__pin').offsetWidth / 2;
+  var pointY = getRandomIntegerFromInterval(130, 630) - document.querySelector('.map__pin').offsetHeight;
   var obj = {
     author: {
       avatar: ''
     },
     offer: {
       title: '',
-      address: location.x + ', ' + location.y,
-      price: randomInteger(1000, 1000000),
-      type: randomElement(ARRAY_TYPE_HOUSE),
-      rooms: randomInteger(1, 5),
-      guests: randomInteger(1, 10),
-      checkin: randomElement(ARRAY_TIME),
-      checkout: randomElement(ARRAY_TIME),
-      features: randomAmountElement(ARRAY_FEATURES),
+      address: pointX + ', ' + pointY,
+      price: getRandomIntegerFromInterval(1000, 1000000),
+      type: getRandomElement(ARRAY_TYPE_HOUSE),
+      rooms: getRandomIntegerFromInterval(1, 5),
+      guests: getRandomIntegerFromInterval(1, 10),
+      checkin: getRandomElement(ARRAY_TIME),
+      checkout: getRandomElement(ARRAY_TIME),
+      features: getRandomAmountElement(ARRAY_FEATURES),
       description: '',
-      photos: shuffleArray(ARRAY_PHOTOS)
+      photos: shuffleArray(ARRAY_PHOTOS.slice())
     },
     location: {
-      x: randomInteger(0, document.querySelector('.map').offsetWidth) - document.querySelector('.map__pin').offsetWidth / 2,
-      y: randomInteger(130, 630) - document.querySelector('.map__pin').offsetHeight
+      x: pointX,
+      y: pointY
     }
   };
   obj.offer.address = obj.location.x + ', ' + obj.location.y;
   return obj;
 };
-var countCustomers = function (count) {
+var getAmountCustomers = function (count) {
   var customer = [];
-  ARRAY_TITLE_HOUSE = shuffleArray(ARRAY_TITLE_HOUSE);
+  var titleHouses = shuffleArray(ARRAY_TITLE_HOUSE.slice());
   for (var i = 0; i < count; i++) {
     customer[i] = createCustomer();
-    customer[i].author.avatar = 'img/avatars/user0' + (i + 1) + '.png';
-    customer[i].offer.title = ARRAY_TITLE_HOUSE[i];
+    customer[i].author.avatar = 'img/avatars/user' + (i + 1 < 10 ? '0' + (i + 1) : i + 1) + '.png';
+    customer[i].offer.title = titleHouses[i];
   }
   return customer;
 };
@@ -114,6 +116,6 @@ var renderCard = function (arr) {
   }
   return fragmentCard;
 };
-var customers = countCustomers(8);
+var customers = getAmountCustomers(8);
 document.querySelector('.map__pins').appendChild(renderPin(customers));
 document.querySelector('.map').insertBefore(renderCard(customers), document.querySelector('.map__filters-container'));
