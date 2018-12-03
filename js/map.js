@@ -14,6 +14,13 @@ var TypeHouse = {
   house: 'Дом',
   bungalo: 'Бунгало'
 };
+
+var mainForm = document.querySelector('.ad-form');
+var formInputs = mainForm.querySelectorAll('fieldset');
+var filterForm = document.querySelector('.map__filters');
+var filterFormInputs = filterForm.querySelectorAll('fieldset,select');
+var mainPin = document.querySelector('.map__pin--main');
+
 var getRandomIntegerFromInterval = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
   rand = Math.round(rand);
@@ -148,11 +155,13 @@ var enabledForm = function () {
   }
   mainForm.querySelector('.ad-form__submit').disabled = false;
 };
-
-var mainForm = document.querySelector('.ad-form');
-var formInputs = mainForm.querySelectorAll('input,select,button');
-var filterForm = document.querySelector('.map__filters');
-var filterFormInputs = filterForm.querySelectorAll('input,select');
+var activatePage = function () {
+  enabledForm();
+  document.querySelector('.map').classList.remove('map--faded');
+  document.querySelector('.map__pins').appendChild(renderPin(getAmountCustomers(8)));
+  document.querySelector('#address').value = mainPin.offsetLeft + WIDTH_PIN + ', ' + (mainPin.offsetTop + HEIGHT_PIN);
+  mainPin.removeEventListener('mouseup', activatePage);
+};
 
 disableForm();
 document.addEventListener('keydown', function (evt) {
@@ -160,11 +169,4 @@ document.addEventListener('keydown', function (evt) {
     deleteCards();
   }
 });
-var customers = getAmountCustomers(8);
-var mainPin = document.querySelector('.map__pin--main');
-mainPin.addEventListener('mouseup', function () {
-  enabledForm();
-  document.querySelector('.map').classList.remove('map--faded');
-  document.querySelector('.map__pins').appendChild(renderPin(customers));
-  document.querySelector('#address').value = mainPin.offsetLeft + WIDTH_PIN + ', ' + (mainPin.offsetTop + HEIGHT_PIN);
-});
+mainPin.addEventListener('mouseup', activatePage);
