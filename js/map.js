@@ -5,8 +5,8 @@ var TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var ESC_CODE = 27;
-var WIDTH_PIN = document.querySelector('.map__pin--main').offsetWidth;
-var HEIGHT_PIN = document.querySelector('.map__pin--main').offsetHeight;
+var MAP_WIDTH = 1200;
+var MAP_HEIGHT = 700;
 
 var TypeHouse = {
   flat: 'Квартира',
@@ -20,6 +20,7 @@ var formInputs = mainForm.querySelectorAll('fieldset');
 var filterForm = document.querySelector('.map__filters');
 var filterFormInputs = filterForm.querySelectorAll('fieldset,select');
 var mainPin = document.querySelector('.map__pin--main');
+var popupClose = document.querySelector('.popup__close');
 
 var getRandomIntegerFromInterval = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
@@ -84,9 +85,18 @@ var getAmountCustomers = function (count) {
   }
   return customer;
 };
-var addClickListenerPin = function (pin, obj) {
+var onPressEscCard = function (evt) {
+  if (evt.keyCode === ESC_CODE) {
+    deleteCards();
+    document.removeEventListener('keydown', onPressEscCard);
+  }
+};
+var openCard = function (pin, obj) {
   pin.addEventListener('click', function () {
+    deleteCards();
     document.querySelector('.map').insertBefore(renderCard(obj), document.querySelector('.map__filters-container'));
+    document.querySelector('.popup__close').addEventListener('click', deleteCards);
+    document.addEventListener('keydown', onPressEscCard);
   });
 };
 var renderPin = function (arr) {
@@ -98,7 +108,7 @@ var renderPin = function (arr) {
     customerElement.style.top = arr[i].location.y + 'px';
     customerElement.querySelector('img').src = arr[i].author.avatar;
     customerElement.title = arr[i].offer.title;
-    addClickListenerPin(customerElement, arr[i]);
+    openCard(customerElement, arr[i]);
     fragmentPin.appendChild(customerElement);
   }
   return fragmentPin;
@@ -123,7 +133,6 @@ var renderCard = function (arr) {
   for (i = 0; i < arr.offer.photos.length; i++) {
     customerElement.querySelector('.popup__photos').innerHTML += '<img src="' + arr.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
   }
-  customerElement.querySelector('.popup__close').addEventListener('click', deleteCards);
   fragmentCard.appendChild(customerElement);
   return fragmentCard;
 };
@@ -155,18 +164,17 @@ var enabledForm = function () {
   }
   mainForm.querySelector('.ad-form__submit').disabled = false;
 };
+var setAddressCoords = function (x, y) {
+  document.querySelector('#address').value = x + ', ' + y;
+};
 var activatePage = function () {
   enabledForm();
   document.querySelector('.map').classList.remove('map--faded');
   document.querySelector('.map__pins').appendChild(renderPin(getAmountCustomers(8)));
-  document.querySelector('#address').value = mainPin.offsetLeft + WIDTH_PIN + ', ' + (mainPin.offsetTop + HEIGHT_PIN);
+  setAddressCoords(MAP_WIDTH / 2, MAP_HEIGHT / 2);
   mainPin.removeEventListener('mouseup', activatePage);
 };
 
 disableForm();
-document.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ESC_CODE) {
-    deleteCards();
-  }
-});
+
 mainPin.addEventListener('mouseup', activatePage);
