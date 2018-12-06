@@ -20,7 +20,10 @@ var formInputs = mainForm.querySelectorAll('fieldset');
 var filterForm = document.querySelector('.map__filters');
 var filterFormInputs = filterForm.querySelectorAll('fieldset,select');
 var mainPin = document.querySelector('.map__pin--main');
-var popupClose = document.querySelector('.popup__close');
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
+var type = document.querySelector('#type');
+var price = document.querySelector('#price');
 
 var getRandomIntegerFromInterval = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
@@ -142,6 +145,26 @@ var deleteCards = function () {
     allCards[i].remove();
   }
 };
+var setPrice = function () {
+  switch (type[type.selectedIndex].value) {
+    case 'bungalo':
+      price.placeholder = 0;
+      price.min = 0;
+      break;
+    case 'flat':
+      price.placeholder = 1000;
+      price.min = 1000;
+      break;
+    case 'house':
+      price.placeholder = 5000;
+      price.min = 5000;
+      break;
+    case 'palace':
+      price.placeholder = 10000;
+      price.min = 10000;
+      break;
+  }
+};
 var disableForm = function () {
   mainForm.classList.add('.ad-form--disabled');
   mainForm.querySelector('.ad-form__submit').disabled = true;
@@ -172,9 +195,14 @@ var activatePage = function () {
   document.querySelector('.map').classList.remove('map--faded');
   document.querySelector('.map__pins').appendChild(renderPin(getAmountCustomers(8)));
   setAddressCoords(MAP_WIDTH / 2, MAP_HEIGHT / 2);
+  timeIn.addEventListener('change', function () {
+    timeOut.selectedIndex = timeIn.selectedIndex;
+  });
+  timeOut.addEventListener('change', function () {
+    timeIn.selectedIndex = timeOut.selectedIndex;
+  });
+  document.querySelector('#type').addEventListener('change', setPrice);
   mainPin.removeEventListener('mouseup', activatePage);
 };
-
 disableForm();
-
 mainPin.addEventListener('mouseup', activatePage);
