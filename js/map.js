@@ -14,6 +14,12 @@ var TypeHouse = {
   house: 'Дом',
   bungalo: 'Бунгало'
 };
+var MinPrice = {
+  flat: 1000,
+  palace: 10000,
+  house: 5000,
+  bungalo: 0
+};
 
 var mainForm = document.querySelector('.ad-form');
 var formInputs = mainForm.querySelectorAll('fieldset');
@@ -24,6 +30,7 @@ var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
 var type = document.querySelector('#type');
 var price = document.querySelector('#price');
+var optionGuests = document.querySelector('#capacity').querySelectorAll('option');
 
 var getRandomIntegerFromInterval = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
@@ -145,28 +152,18 @@ var deleteCards = function () {
     allCards[i].remove();
   }
 };
-var setPrice = function () {
-  switch (type[type.selectedIndex].value) {
-    case 'bungalo':
-      price.placeholder = 0;
-      price.min = 0;
-      break;
-    case 'flat':
-      price.placeholder = 1000;
-      price.min = 1000;
-      break;
-    case 'house':
-      price.placeholder = 5000;
-      price.min = 5000;
-      break;
-    case 'palace':
-      price.placeholder = 10000;
-      price.min = 10000;
-      break;
+var deletePins = function () {
+  var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < allPins.length; i++) {
+    allPins[i].remove();
   }
 };
+var setPrice = function () {
+  price.placeholder = MinPrice[type.value];
+  price.min = MinPrice[type.value];
+};
 var disableForm = function () {
-  mainForm.classList.add('.ad-form--disabled');
+  mainForm.classList.add('ad-form--disabled');
   mainForm.querySelector('.ad-form__submit').disabled = true;
   filterForm.disabled = true;
   for (var i = 0; i < formInputs.length; i++) {
@@ -176,7 +173,7 @@ var disableForm = function () {
     filterFormInputs[i].disabled = true;
   }
 };
-var enabledForm = function () {
+var enableForm = function () {
   mainForm.classList.remove('ad-form--disabled');
   filterForm.disabled = false;
   for (var i = 0; i < formInputs.length; i++) {
@@ -190,19 +187,60 @@ var enabledForm = function () {
 var setAddressCoords = function (x, y) {
   document.querySelector('#address').value = x + ', ' + y;
 };
+var disableOptions = function () {
+  for (var i = 0; i < optionGuests.length; i++) {
+    optionGuests[i].disabled = true;
+  }
+};
+var setGuests = function () {
+  disableOptions();
+  var currentOption = document.querySelector('#room_number').value;
+  if (currentOption === '100') {
+    optionGuests[3].disabled = false;
+  } else {
+    for (var i = 0; i < currentOption; i++) {
+      optionGuests[i].disabled = false;
+    }
+  }
+};
+var resetFormInputs = function () {
+  var features = document.querySelectorAll('input[name="features"]');
+  for (var i = 0; i < features.length; i++) {
+    features[i].checked = false;
+  }
+  document.querySelector('#title').value = '';
+  type.value = 'flat';
+  price.value = '';
+  price.placeholder = 1000;
+  document.querySelector('#room_number').value = '1';
+  document.querySelector('#capacity').value = '1';
+  document.querySelector('#description').value = '';
+  timeIn.value = '12:00';
+  timeOut.value = '12:00';
+};
 var activatePage = function () {
-  enabledForm();
+  enableForm();
   document.querySelector('.map').classList.remove('map--faded');
   document.querySelector('.map__pins').appendChild(renderPin(getAmountCustomers(8)));
   setAddressCoords(MAP_WIDTH / 2, MAP_HEIGHT / 2);
   timeIn.addEventListener('change', function () {
-    timeOut.selectedIndex = timeIn.selectedIndex;
+    timeOut.value = timeIn.value;
   });
   timeOut.addEventListener('change', function () {
-    timeIn.selectedIndex = timeOut.selectedIndex;
+    timeIn.value = timeOut.value;
   });
   document.querySelector('#type').addEventListener('change', setPrice);
+  document.querySelector('#room_number').addEventListener('change', setGuests);
   mainPin.removeEventListener('mouseup', activatePage);
+};
+var resetForm = function () {
+  deleteCards();
+  deletePins();
+  resetFormInputs();
+  disableForm();
+  document.querySelector('.map').classList.add('map--faded');
+  mainPin.addEventListener('mouseup', activatePage);
 };
 disableForm();
 mainPin.addEventListener('mouseup', activatePage);
+document.querySelector('.ad-form__reset').addEventListener('click', resetForm);
