@@ -7,6 +7,8 @@ var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.g
 var ESC_CODE = 27;
 var MAP_WIDTH = 1200;
 var MAP_HEIGHT = 700;
+var PIN_WIDTH = document.querySelector('.map__pin--main').offsetWidth;
+var PIN_HEIGHT = document.querySelector('.map__pin--main').offsetHeight;
 
 var TypeHouse = {
   flat: 'Квартира',
@@ -234,5 +236,35 @@ var onSubmitClick = function () {
 
 disableForm();
 mainPin.addEventListener('mouseup', activatePage);
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+    if (mainPin.offsetLeft - shift.x > 0 && mainPin.offsetLeft - shift.x < MAP_WIDTH - PIN_WIDTH && mainPin.offsetTop - shift.y > 0 && mainPin.offsetTop - shift.y < MAP_HEIGHT - PIN_HEIGHT) {
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    }
+  };
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    setAddressCoords(mainPin.offsetLeft, mainPin.offsetTop);
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
 document.querySelector('.ad-form__submit').addEventListener('click', onSubmitClick);
 document.querySelector('.ad-form__reset').addEventListener('click', resetForm);
