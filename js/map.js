@@ -6,9 +6,9 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var ESC_CODE = 27;
 var MAP_WIDTH = 1200;
-var MAP_HEIGHT = 700;
+var MAP_HEIGHT = 630;
 var PIN_WIDTH = document.querySelector('.map__pin--main').offsetWidth;
-var PIN_HEIGHT = document.querySelector('.map__pin--main').offsetHeight;
+var PIN_HEIGHT = document.querySelector('.map__pin--main').offsetHeight + parseInt(10, window.getComputedStyle(document.querySelector('.map__pin--main'), ':after').getPropertyValue('height'));
 
 var TypeHouse = {
   flat: 'Квартира',
@@ -27,6 +27,12 @@ var RoomToGuest = {
   ROOM_2: ['1', '2'],
   ROOM_3: ['1', '2', '3'],
   ROOM_100: ['0'],
+};
+var CoordsMinMax = {
+  TOP: 130,
+  BOTTOM: 630,
+  LEFT: 0,
+  RIGHT: 1200
 };
 
 var mainForm = document.querySelector('.ad-form');
@@ -252,14 +258,16 @@ mainPin.addEventListener('mousedown', function (evt) {
       x: moveEvt.clientX,
       y: moveEvt.clientY
     };
-    if (mainPin.offsetLeft - shift.x > 0 && mainPin.offsetLeft - shift.x < MAP_WIDTH - PIN_WIDTH && mainPin.offsetTop - shift.y > 0 && mainPin.offsetTop - shift.y < MAP_HEIGHT - PIN_HEIGHT) {
+    if (mainPin.offsetLeft - shift.x >= CoordsMinMax.LEFT && mainPin.offsetLeft - shift.x <= CoordsMinMax.RIGHT - PIN_WIDTH) {
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+    }
+    if (mainPin.offsetTop - shift.y >= CoordsMinMax.TOP - PIN_HEIGHT && mainPin.offsetTop - shift.y <= CoordsMinMax.BOTTOM - PIN_HEIGHT) {
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
     }
   };
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    setAddressCoords(mainPin.offsetLeft, mainPin.offsetTop);
+    setAddressCoords(mainPin.offsetLeft + PIN_WIDTH / 2, mainPin.offsetTop + PIN_HEIGHT);
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
