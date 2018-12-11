@@ -267,7 +267,7 @@ mainPin.addEventListener('mousedown', function (evt) {
   };
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    setAddressCoords(mainPin.offsetLeft + PIN_WIDTH / 2, mainPin.offsetTop + PIN_HEIGHT);
+    setAddressCoords(Math.round(mainPin.offsetLeft + PIN_WIDTH / 2), Math.round(mainPin.offsetTop + PIN_HEIGHT));
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
