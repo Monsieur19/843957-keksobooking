@@ -1,10 +1,16 @@
 'use strict';
 (function () {
   var MinPrice = {
-    flat: 1000,
-    palace: 10000,
-    house: 5000,
-    bungalo: 0
+    FLAT: 1000,
+    PALACE: 10000,
+    HOUSE: 5000,
+    BUNGALO: 0
+  };
+  var RoomToGuest = {
+    ROOM_1: ['1'],
+    ROOM_2: ['1', '2'],
+    ROOM_3: ['1', '2', '3'],
+    ROOM_100: ['0'],
   };
 
   var mainForm = document.querySelector('.ad-form');
@@ -16,16 +22,24 @@
   var timeOut = document.querySelector('#timeout');
   var type = document.querySelector('#type');
   var price = document.querySelector('#price');
+  var roomSelect = document.querySelector('#room_number');
+  var guestSelect = document.querySelector('#capacity');
 
-  var deletePins = function () {
-    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < allPins.length; i++) {
-      allPins[i].remove();
+  var validateGuestAndRoom = function () {
+    var guests = RoomToGuest['ROOM_' + roomSelect.value];
+    var isMatch = guests.includes(guestSelect.value);
+    if (isMatch) {
+      roomSelect.setCustomValidity('');
+    } else {
+      roomSelect.setCustomValidity('Мало комнат для стольких гостей или помещение не предназначено для гостей');
     }
   };
+  var onSubmitClick = function () {
+    validateGuestAndRoom();
+  };
   var setPrice = function () {
-    price.placeholder = MinPrice[type.value];
-    price.min = MinPrice[type.value];
+    price.placeholder = MinPrice[type.value.toUpperCase()];
+    price.min = MinPrice[type.value.toUpperCase()];
   };
   var disableForm = function () {
     mainForm.classList.add('ad-form--disabled');
@@ -52,7 +66,7 @@
   var activatePage = function () {
     enableForm();
     document.querySelector('.map').classList.remove('map--faded');
-    document.querySelector('.map__pins').appendChild(window.pinAndCard.renderPin(window.data.getAmountCustomers(8)));
+    document.querySelector('.map__pins').appendChild(window.pin.render(window.data.getAmountCustomers(8)));
     timeIn.addEventListener('change', function () {
       timeOut.value = timeIn.value;
     });
@@ -60,20 +74,21 @@
       timeIn.value = timeOut.value;
     });
     document.querySelector('#type').addEventListener('change', setPrice);
-    mainPin.removeEventListener('mouseup', activatePage);
+    mainPin.removeEventListener('click', activatePage);
   };
   var resetForm = function (evt) {
     evt.preventDefault();
-    window.pinAndCard.deleteCards();
-    deletePins();
+    window.card.deleteCards();
+    window.pin.delete();
     disableForm();
     mainForm.reset();
     document.querySelector('.map').classList.add('map--faded');
     price.placeholder = 1000;
     price.min = 1000;
-    mainPin.addEventListener('mouseup', activatePage);
+    mainPin.addEventListener('click', activatePage);
   };
   disableForm();
-  mainPin.addEventListener('mouseup', activatePage);
+  mainPin.addEventListener('click', activatePage);
+  document.querySelector('.ad-form__submit').addEventListener('click', onSubmitClick);
   document.querySelector('.ad-form__reset').addEventListener('click', resetForm);
 })();
