@@ -12,8 +12,10 @@
 
   var mainPin = document.querySelector('.map__pin--main');
 
-  var setAddressCoords = function (x, y) {
-    document.querySelector('#address').value = x + ', ' + y;
+  var disableMap = function () {
+    window.card.delete();
+    window.pin.delete();
+    document.querySelector('.map').classList.add('map--faded');
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
@@ -41,11 +43,23 @@
     };
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      setAddressCoords(Math.round(mainPin.offsetLeft + PIN_WIDTH / 2), Math.round(mainPin.offsetTop + PIN_HEIGHT));
+      window.form.setAddress(Math.round(mainPin.offsetLeft + PIN_WIDTH / 2), Math.round(mainPin.offsetTop + PIN_HEIGHT));
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+  var activatePage = function () {
+    window.form.enable();
+    document.querySelector('.map').classList.remove('map--faded');
+    document.querySelector('.map__pins').appendChild(window.pin.render(window.data.getAmountCustomers(8)));
+    mainPin.removeEventListener('click', activatePage);
+  };
+
+  mainPin.addEventListener('click', activatePage);
+  window.map = {
+    activate: activatePage,
+    disable: disableMap
+  };
 })();

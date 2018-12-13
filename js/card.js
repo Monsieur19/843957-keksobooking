@@ -8,7 +8,7 @@
   };
 
   var onPressEscCard = function (evt) {
-    if (evt.keyCode === window.util.ESC_CODE) {
+    if (window.util.isEsc(evt.keyCode)) {
       deleteCards();
       document.removeEventListener('keydown', onPressEscCard);
     }

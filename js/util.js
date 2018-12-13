@@ -1,7 +1,11 @@
 'use strict';
 (function () {
-  var ESC_CODE = 27;
-
+  var isEsc = function (currentElement) {
+    if (currentElement === 27) {
+      return true;
+    }
+    return false;
+  };
   var getRandomIntegerFromInterval = function (min, max) {
     var rand = min - 0.5 + Math.random() * (max - min + 1);
     rand = Math.round(rand);
@@ -36,6 +40,6 @@
     getRandomElement: getRandomElement,
     getRandomAmountElement: getRandomAmountElement,
     shuffleArray: shuffleArray,
-    ESC_CODE: ESC_CODE
+    isEsc: isEsc
   };
 })();

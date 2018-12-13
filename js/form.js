@@ -34,6 +34,9 @@
       roomSelect.setCustomValidity('Мало комнат для стольких гостей или помещение не предназначено для гостей');
     }
   };
+  var setAddressCoords = function (x, y) {
+    document.querySelector('#address').value = x + ', ' + y;
+  };
   var onSubmitClick = function () {
     validateGuestAndRoom();
   };
@@ -63,32 +66,27 @@
     }
     mainForm.querySelector('.ad-form__submit').disabled = false;
   };
-  var activatePage = function () {
-    enableForm();
-    document.querySelector('.map').classList.remove('map--faded');
-    document.querySelector('.map__pins').appendChild(window.pin.render(window.data.getAmountCustomers(8)));
-    timeIn.addEventListener('change', function () {
-      timeOut.value = timeIn.value;
-    });
-    timeOut.addEventListener('change', function () {
-      timeIn.value = timeOut.value;
-    });
-    document.querySelector('#type').addEventListener('change', setPrice);
-    mainPin.removeEventListener('click', activatePage);
-  };
   var resetForm = function (evt) {
     evt.preventDefault();
-    window.card.deleteCards();
-    window.pin.delete();
     disableForm();
+    window.map.disable();
     mainForm.reset();
-    document.querySelector('.map').classList.add('map--faded');
     price.placeholder = 1000;
     price.min = 1000;
-    mainPin.addEventListener('click', activatePage);
+    mainPin.addEventListener('click', window.map.activate);
   };
   disableForm();
-  mainPin.addEventListener('click', activatePage);
+  timeIn.addEventListener('change', function () {
+    timeOut.value = timeIn.value;
+  });
+  timeOut.addEventListener('change', function () {
+    timeIn.value = timeOut.value;
+  });
+  document.querySelector('#type').addEventListener('change', setPrice);
   document.querySelector('.ad-form__submit').addEventListener('click', onSubmitClick);
   document.querySelector('.ad-form__reset').addEventListener('click', resetForm);
+  window.form = {
+    enable: enableForm,
+    setAddress: setAddressCoords
+  };
 })();
