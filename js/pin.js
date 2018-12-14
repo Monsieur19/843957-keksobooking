@@ -18,7 +18,7 @@
       window.card.open(customerElement, arr[i]);
       fragmentPin.appendChild(customerElement);
     }
-    return fragmentPin;
+    document.querySelector('.map__pins').appendChild(fragmentPin);
   };
   window.pin = {
     render: renderPin,

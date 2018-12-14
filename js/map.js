@@ -50,10 +50,45 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+  var onPressEscError = function (evt) {
+    if (window.util.isEsc(evt.keyCode)) {
+      document.querySelector('div.error').remove();
+      document.removeEventListener('keydown', onPressEscError);
+    }
+  };
+  var onPressEscSuccess = function (evt) {
+    if (window.util.isEsc(evt.keyCode)) {
+      document.querySelector('div.success').remove();
+      document.removeEventListener('keydown', onPressEscSuccess);
+    }
+  };
+  var onClickSuccess = function () {
+    document.querySelector('div.success').remove();
+    document.removeEventListener('click', onClickSuccess);
+  };
+  var showSuccess = function () {
+    var templateSuccess = document.querySelector('#success').content.cloneNode(true);
+    var fragmentSuccess = document.createDocumentFragment();
+    document.addEventListener('click', onClickSuccess);
+    document.addEventListener('keydown', onPressEscSuccess);
+    fragmentSuccess.appendChild(templateSuccess);
+    document.body.appendChild(fragmentSuccess);
+  };
+  var showError = function () {
+    var templateError = document.querySelector('#error').content.cloneNode(true);
+    var fragmentError = document.createDocumentFragment();
+    templateError.querySelector('button').addEventListener('click', function () {
+      document.querySelector('div.error').remove();
+      window.backend.onLoad(showError);
+    });
+    document.addEventListener('keydown', onPressEscError);
+    fragmentError.appendChild(templateError);
+    document.body.appendChild(fragmentError);
+  };
   var activatePage = function () {
     window.form.enable();
     document.querySelector('.map').classList.remove('map--faded');
-    document.querySelector('.map__pins').appendChild(window.pin.render(window.data.getAmountCustomers(8)));
+    window.backend.onLoad(showSuccess, showError);
     mainPin.removeEventListener('click', activatePage);
   };
 
