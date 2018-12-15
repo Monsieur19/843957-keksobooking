@@ -74,12 +74,13 @@
     fragmentSuccess.appendChild(templateSuccess);
     document.body.appendChild(fragmentSuccess);
   };
-  var showError = function () {
+  var showError = function (message) {
     var templateError = document.querySelector('#error').content.cloneNode(true);
     var fragmentError = document.createDocumentFragment();
+    templateError.querySelector('.error__message').textContent = message;
     templateError.querySelector('button').addEventListener('click', function () {
       document.querySelector('div.error').remove();
-      window.backend.onLoad(showError);
+      window.backend.onLoad(showSuccess, showError);
     });
     document.addEventListener('keydown', onPressEscError);
     fragmentError.appendChild(templateError);
@@ -95,6 +96,8 @@
   mainPin.addEventListener('click', activatePage);
   window.map = {
     activate: activatePage,
-    disable: disableMap
+    disable: disableMap,
+    showSuccess: showSuccess,
+    showError: showError
   };
 })();
