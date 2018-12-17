@@ -89,10 +89,13 @@
   var activatePage = function () {
     window.form.enable();
     document.querySelector('.map').classList.remove('map--faded');
-    window.backend.onLoad(showSuccess, showError);
+    window.backend.onLoad(showError);
     mainPin.removeEventListener('click', activatePage);
   };
 
+  document.querySelector('.map__filters').addEventListener('change', function () {
+    window.pin.render(window.filter.check(window.backend.customers));
+  });
   mainPin.addEventListener('click', activatePage);
   window.map = {
     activate: activatePage,

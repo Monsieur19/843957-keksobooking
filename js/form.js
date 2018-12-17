@@ -86,6 +86,7 @@
   });
   document.querySelector('#type').addEventListener('change', setPrice);
   document.querySelector('.ad-form__submit').addEventListener('click', function (evt) {
+    evt.preventDefault();
     onSubmitClick();
   });
   document.querySelector('.ad-form__reset').addEventListener('click', resetForm);

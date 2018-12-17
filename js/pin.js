@@ -7,6 +7,7 @@
     }
   };
   var renderPin = function (arr) {
+    deletePins();
     var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
     var fragmentPin = document.createDocumentFragment();
     for (var i = 0; i < arr.length; i++) {
