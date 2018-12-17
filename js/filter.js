@@ -14,6 +14,7 @@
         return customer.offer.type === document.querySelector('#housing-type').value;
       }
     });
+    
     customers = customers.filter(function (customer) {
       if (document.querySelector('#housing-price').value === 'any') {
         return customer;
