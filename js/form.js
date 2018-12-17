@@ -39,6 +39,9 @@
   };
   var onSubmitClick = function () {
     validateGuestAndRoom();
+    if (mainForm.checkValidity()) {
+      window.backend.send(window.map.showSuccess, window.map.showError);
+    }
   };
   var setPrice = function () {
     price.placeholder = MinPrice[type.value.toUpperCase()];
@@ -66,8 +69,7 @@
     }
     mainForm.querySelector('.ad-form__submit').disabled = false;
   };
-  var resetForm = function (evt) {
-    evt.preventDefault();
+  var resetForm = function () {
     disableForm();
     window.map.disable();
     mainForm.reset();
@@ -83,10 +85,15 @@
     timeIn.value = timeOut.value;
   });
   document.querySelector('#type').addEventListener('change', setPrice);
-  document.querySelector('.ad-form__submit').addEventListener('click', onSubmitClick);
+  document.querySelector('.ad-form__submit').addEventListener('click', function (evt) {
+    evt.preventDefault();
+    onSubmitClick();
+  });
   document.querySelector('.ad-form__reset').addEventListener('click', resetForm);
   window.form = {
     enable: enableForm,
-    setAddress: setAddressCoords
+    setAddress: setAddressCoords,
+    mainForm: mainForm,
+    reset: resetForm
   };
 })();

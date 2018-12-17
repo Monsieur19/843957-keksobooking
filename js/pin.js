@@ -7,6 +7,7 @@
     }
   };
   var renderPin = function (arr) {
+    deletePins();
     var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
     var fragmentPin = document.createDocumentFragment();
     for (var i = 0; i < arr.length; i++) {
@@ -18,7 +19,7 @@
       window.card.open(customerElement, arr[i]);
       fragmentPin.appendChild(customerElement);
     }
-    return fragmentPin;
+    document.querySelector('.map__pins').appendChild(fragmentPin);
   };
   window.pin = {
     render: renderPin,
