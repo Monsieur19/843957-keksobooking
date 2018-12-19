@@ -35,15 +35,20 @@
     }
     return arrayCopy;
   };
-  var debounce=function(arr){
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    var lastTimeout=window.setTimeout(function() {
-        window.pin.render(window.filter.check(arr));
-        console.log(123);
-      }, 1000);
-  }
+  var DEBOUNCE_INTERVAL = 1000;
+  var debounce = function (cb) {
+    var lastTimeout = null;
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
+  };
+
   window.util = {
     getRandomIntegerFromInterval: getRandomIntegerFromInterval,
     getRandomElement: getRandomElement,

@@ -57,21 +57,21 @@
       document.removeEventListener('keydown', onPressEscError);
     }
   };
+  var onSuccess = function (arr) {
+    mainArrayWithCustomers = arr;
+    window.pin.render(mainArrayWithCustomers);
+  };
   var showError = function (message) {
     var templateError = document.querySelector('#error').content.cloneNode(true);
     var fragmentError = document.createDocumentFragment();
     templateError.querySelector('.error__message').textContent = message;
     templateError.querySelector('button').addEventListener('click', function () {
       document.querySelector('div.error').remove();
-      window.backend.onLoad(showError);
+      window.backend.onLoad(onSuccess, showError);
     });
     document.addEventListener('keydown', onPressEscError);
     fragmentError.appendChild(templateError);
     document.body.appendChild(fragmentError);
-  };
-  var onSuccess = function (arr) {
-    mainArrayWithCustomers = arr;
-    window.pin.render(arr);
   };
   var activatePage = function () {
     window.form.enable();
@@ -79,14 +79,14 @@
     window.backend.onLoad(onSuccess, showError);
     mainPin.removeEventListener('click', activatePage);
   };
-
-  document.querySelector('.map__filters').addEventListener('change', function () {
-    window.util.debounce(mainArrayWithCustomers);
-  });
+  document.querySelector('.map__filters').addEventListener('change', window.util.debounce(function () {
+    window.pin.render(window.filter.check(mainArrayWithCustomers));
+  }));
   mainPin.addEventListener('click', activatePage);
   window.map = {
     activate: activatePage,
     disable: disableMap,
-    showError: showError
+    showError: showError,
+    mainArray: mainArrayWithCustomers
   };
 })();
