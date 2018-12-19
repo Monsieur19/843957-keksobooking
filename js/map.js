@@ -2,6 +2,7 @@
 (function () {
   var PIN_WIDTH = document.querySelector('.map__pin--main').offsetWidth;
   var PIN_HEIGHT = document.querySelector('.map__pin--main').offsetHeight + parseInt(10, window.getComputedStyle(document.querySelector('.map__pin--main'), ':after').getPropertyValue('height'));
+  var mainArrayWithCustomers = [];
 
   var CoordsMinMax = {
     TOP: 130,
@@ -69,6 +70,7 @@
     document.body.appendChild(fragmentError);
   };
   var onSuccess = function (arr) {
+    mainArrayWithCustomers = arr;
     window.pin.render(arr);
   };
   var activatePage = function () {
@@ -79,7 +81,7 @@
   };
 
   document.querySelector('.map__filters').addEventListener('change', function () {
-    window.pin.render(window.filter.check(window.backend.customers));
+    window.util.debounce(mainArrayWithCustomers);
   });
   mainPin.addEventListener('click', activatePage);
   window.map = {

@@ -30,10 +30,10 @@
         isTrue = false;
       }
       for (i = 0; i < featuresValue.length; i++) {
-        isTrue = customer.offer.features.includes(document.querySelector('#filter-' + featuresValue[i]).value);
         if (!isTrue) {
           break;
         }
+        isTrue = customer.offer.features.includes(document.querySelector('#filter-' + featuresValue[i]).value);
       }
       return isTrue;
     });

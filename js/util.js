@@ -35,11 +35,21 @@
     }
     return arrayCopy;
   };
+  var debounce=function(arr){
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    var lastTimeout=window.setTimeout(function() {
+        window.pin.render(window.filter.check(arr));
+        console.log(123);
+      }, 1000);
+  }
   window.util = {
     getRandomIntegerFromInterval: getRandomIntegerFromInterval,
     getRandomElement: getRandomElement,
     getRandomAmountElement: getRandomAmountElement,
     shuffleArray: shuffleArray,
-    isEsc: isEsc
+    isEsc: isEsc,
+    debounce: debounce
   };
 })();
