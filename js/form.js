@@ -37,10 +37,28 @@
   var setAddressCoords = function (x, y) {
     document.querySelector('#address').value = x + ', ' + y;
   };
+  var onPressEscSuccess = function (evt) {
+    if (window.util.isEsc(evt.keyCode)) {
+      document.querySelector('div.success').remove();
+      document.removeEventListener('keydown', onPressEscSuccess);
+    }
+  };
+  var onClickSuccess = function () {
+    document.querySelector('div.success').remove();
+    document.removeEventListener('click', onClickSuccess);
+  };
+  var showSuccess = function () {
+    var templateSuccess = document.querySelector('#success').content.cloneNode(true);
+    var fragmentSuccess = document.createDocumentFragment();
+    document.addEventListener('click', onClickSuccess);
+    document.addEventListener('keydown', onPressEscSuccess);
+    fragmentSuccess.appendChild(templateSuccess);
+    document.body.appendChild(fragmentSuccess);
+  };
   var onSubmitClick = function () {
     validateGuestAndRoom();
     if (mainForm.checkValidity()) {
-      window.backend.send(window.map.showSuccess, window.map.showError);
+      window.backend.send(showSuccess, window.map.showError);
     }
   };
   var setPrice = function () {

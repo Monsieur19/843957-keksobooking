@@ -56,40 +56,25 @@
       document.removeEventListener('keydown', onPressEscError);
     }
   };
-  var onPressEscSuccess = function (evt) {
-    if (window.util.isEsc(evt.keyCode)) {
-      document.querySelector('div.success').remove();
-      document.removeEventListener('keydown', onPressEscSuccess);
-    }
-  };
-  var onClickSuccess = function () {
-    document.querySelector('div.success').remove();
-    document.removeEventListener('click', onClickSuccess);
-  };
-  var showSuccess = function () {
-    var templateSuccess = document.querySelector('#success').content.cloneNode(true);
-    var fragmentSuccess = document.createDocumentFragment();
-    document.addEventListener('click', onClickSuccess);
-    document.addEventListener('keydown', onPressEscSuccess);
-    fragmentSuccess.appendChild(templateSuccess);
-    document.body.appendChild(fragmentSuccess);
-  };
   var showError = function (message) {
     var templateError = document.querySelector('#error').content.cloneNode(true);
     var fragmentError = document.createDocumentFragment();
     templateError.querySelector('.error__message').textContent = message;
     templateError.querySelector('button').addEventListener('click', function () {
       document.querySelector('div.error').remove();
-      window.backend.onLoad(showSuccess, showError);
+      window.backend.onLoad(showError);
     });
     document.addEventListener('keydown', onPressEscError);
     fragmentError.appendChild(templateError);
     document.body.appendChild(fragmentError);
   };
+  var onSuccess = function (arr) {
+    window.pin.render(arr);
+  };
   var activatePage = function () {
     window.form.enable();
     document.querySelector('.map').classList.remove('map--faded');
-    window.backend.onLoad(showError);
+    window.backend.onLoad(onSuccess, showError);
     mainPin.removeEventListener('click', activatePage);
   };
 
@@ -100,7 +85,6 @@
   window.map = {
     activate: activatePage,
     disable: disableMap,
-    showSuccess: showSuccess,
     showError: showError
   };
 })();
