@@ -8,6 +8,7 @@
   };
   var renderPin = function (arr) {
     deletePins();
+    window.card.delete();
     var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
     var fragmentPin = document.createDocumentFragment();
     for (var i = 0; i < arr.length; i++) {
@@ -21,8 +22,15 @@
     }
     document.querySelector('.map__pins').appendChild(fragmentPin);
   };
+  var deleteActive = function () {
+    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < allPins.length; i++) {
+      allPins[i].classList.remove('map__pin--active');
+    }
+  };
   window.pin = {
     render: renderPin,
-    delete: deletePins
+    delete: deletePins,
+    deleteActive: deleteActive
   };
 })();

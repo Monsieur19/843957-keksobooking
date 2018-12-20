@@ -29,6 +29,7 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         window.form.reset();
+        window.filter.reset();
         onSuccess();
       } else {
         onError();

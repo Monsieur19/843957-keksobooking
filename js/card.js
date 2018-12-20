@@ -10,6 +10,7 @@
   var onPressEscCard = function (evt) {
     if (window.util.isEsc(evt.keyCode)) {
       deleteCards();
+      window.pin.deleteActive();
       document.removeEventListener('keydown', onPressEscCard);
     }
   };
@@ -45,6 +46,8 @@
   var openCard = function (pin, obj) {
     pin.addEventListener('click', function () {
       deleteCards();
+      window.pin.deleteActive();
+      pin.classList.add('map__pin--active');
       document.querySelector('.map').insertBefore(renderCard(obj), document.querySelector('.map__filters-container'));
       document.querySelector('.popup__close').addEventListener('click', deleteCards);
       document.addEventListener('keydown', onPressEscCard);

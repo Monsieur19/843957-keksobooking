@@ -35,7 +35,7 @@
     }
     return arrayCopy;
   };
-  var DEBOUNCE_INTERVAL = 1000;
+  var DEBOUNCE_INTERVAL = 500;
   var debounce = function (cb) {
     var lastTimeout = null;
     return function () {
