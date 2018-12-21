@@ -38,7 +38,7 @@
       }
     });
     xhr.open('POST', URL_POST);
-    xhr.send();
+    xhr.send(data);
   };
   window.backend = {
     onLoad: getCustomers,

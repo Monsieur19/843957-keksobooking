@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  MIN_PRICE = 10000;
+  MAX_PRICE = 50000;
   var checkFilter = function (arr) {
     var filterType = document.querySelector('#housing-type').value;
     var filterPrice = document.querySelector('#housing-price').value;
@@ -16,11 +18,11 @@
       if (filterType !== 'any' && customer.offer.type !== filterType) {
         isTrue = false;
       }
-      if (filterPrice === 'low' && customer.offer.price > 10000) {
+      if (filterPrice === 'low' && customer.offer.price > MIN_PRICE) {
         isTrue = false;
-      } else if (filterPrice === 'middle' && (customer.offer.price > 50000 || customer.offer.price < 10000)) {
+      } else if (filterPrice === 'middle' && (customer.offer.price > MAX_PRICE || customer.offer.price < MIN_PRICE)) {
         isTrue = false;
-      } else if (filterPrice === 'high' && customer.offer.price < 50000) {
+      } else if (filterPrice === 'high' && customer.offer.price < MAX_PRICE) {
         isTrue = false;
       }
       if (filterRoom !== 'any' && customer.offer.rooms.toString() !== filterRoom) {
