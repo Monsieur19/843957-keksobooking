@@ -58,8 +58,10 @@
     }
   };
   var onSuccess = function (arr) {
-    mainArrayWithCustomers = arr;
-    window.pin.render(mainArrayWithCustomers);
+    mainArrayWithCustomers = window.filter.check(arr);
+    for (var i = 0; i < mainArrayWithCustomers.length; i++) {
+      window.pin.render(mainArrayWithCustomers[i]);
+    }
   };
   var showError = function (message) {
     var templateError = document.querySelector('#error').content.cloneNode(true);
@@ -80,7 +82,11 @@
     mainPin.removeEventListener('click', activatePage);
   };
   document.querySelector('.map__filters').addEventListener('change', window.util.debounce(function () {
-    window.pin.render(window.filter.check(mainArrayWithCustomers));
+    window.pin.delete();
+    var checkedArray = window.filter.check(mainArrayWithCustomers);
+    for (var i = 0; i < checkedArray.length; i++) {
+      window.pin.render(checkedArray[i]);
+    }
   }));
   mainPin.addEventListener('click', activatePage);
   window.map = {

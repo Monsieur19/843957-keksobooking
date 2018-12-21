@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var START_PRICE = 1000;
+
   var MinPrice = {
     FLAT: 1000,
     PALACE: 10000,
@@ -48,6 +50,8 @@
     document.removeEventListener('click', onClickSuccess);
   };
   var showSuccess = function () {
+    window.form.reset();
+    window.filter.reset();
     var templateSuccess = document.querySelector('#success').content.cloneNode(true);
     var fragmentSuccess = document.createDocumentFragment();
     document.addEventListener('click', onClickSuccess);
@@ -91,8 +95,8 @@
     disableForm();
     window.map.disable();
     mainForm.reset();
-    price.placeholder = 1000;
-    price.min = 1000;
+    price.placeholder = START_PRICE;
+    price.min = START_PRICE;
     mainPin.addEventListener('click', window.map.activate);
   };
   disableForm();
@@ -103,8 +107,10 @@
     timeIn.value = timeOut.value;
   });
   document.querySelector('#type').addEventListener('change', setPrice);
-  document.querySelector('.ad-form__submit').addEventListener('click', function (evt) {
+  document.querySelector('.ad-form').addEventListener('submit', function (evt) {
     evt.preventDefault();
+  });
+  document.querySelector('.ad-form__submit').addEventListener('click', function () {
     onSubmitClick();
   });
   document.querySelector('.ad-form__reset').addEventListener('click', resetForm);

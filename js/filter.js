@@ -37,9 +37,7 @@
       }
       return isTrue;
     });
-    if (customers.length !== arrCopy.length) {
-      customers = customers.slice(0, 5);
-    }
+    //customers = customers.slice(0, 5);
     return customers;
   };
   var resetFilter = function () {
