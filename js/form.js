@@ -42,11 +42,13 @@
   var onPressEscSuccess = function (evt) {
     if (window.util.isEsc(evt.keyCode)) {
       document.querySelector('div.success').remove();
+      document.removeEventListener('click', onClickSuccess);
       document.removeEventListener('keydown', onPressEscSuccess);
     }
   };
   var onClickSuccess = function () {
     document.querySelector('div.success').remove();
+    document.removeEventListener('keydown', onPressEscSuccess);
     document.removeEventListener('click', onClickSuccess);
   };
   var showSuccess = function () {

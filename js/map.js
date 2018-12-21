@@ -2,6 +2,8 @@
 (function () {
   var PIN_WIDTH = document.querySelector('.map__pin--main').offsetWidth;
   var PIN_HEIGHT = document.querySelector('.map__pin--main').offsetHeight + parseInt(10, window.getComputedStyle(document.querySelector('.map__pin--main'), ':after').getPropertyValue('height'));
+  var START_PIN_X = 570;
+  var START_PIN_Y = 375;
   var mainArrayWithCustomers = [];
 
   var CoordsMinMax = {
@@ -17,6 +19,8 @@
     window.card.delete();
     window.pin.delete();
     document.querySelector('.map').classList.add('map--faded');
+    mainPin.style.left = START_PIN_X + 'px';
+    mainPin.style.top = START_PIN_Y + 'px';
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
