@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  MIN_PRICE = 10000;
-  MAX_PRICE = 50000;
+  var MIN_PRICE = 10000;
+  var MAX_PRICE = 50000;
   var checkFilter = function (arr) {
     var filterType = document.querySelector('#housing-type').value;
     var filterPrice = document.querySelector('#housing-price').value;
