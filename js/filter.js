@@ -37,7 +37,6 @@
       }
       return isTrue;
     });
-    //customers = customers.slice(0, 5);
     return customers;
   };
   var resetFilter = function () {

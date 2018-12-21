@@ -62,7 +62,7 @@
   var onSubmitClick = function () {
     validateGuestAndRoom();
     if (mainForm.checkValidity()) {
-      window.backend.send(showSuccess, window.map.showError);
+      window.backend.send(new FormData(mainForm), showSuccess, window.map.showError);
     }
   };
   var setPrice = function () {

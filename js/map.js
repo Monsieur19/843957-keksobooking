@@ -59,7 +59,7 @@
   };
   var onSuccess = function (arr) {
     mainArrayWithCustomers = window.filter.check(arr);
-    for (var i = 0; i < mainArrayWithCustomers.length; i++) {
+    for (var i = 0; i < 5; i++) {
       window.pin.render(mainArrayWithCustomers[i]);
     }
   };
@@ -84,7 +84,7 @@
   document.querySelector('.map__filters').addEventListener('change', window.util.debounce(function () {
     window.pin.delete();
     var checkedArray = window.filter.check(mainArrayWithCustomers);
-    for (var i = 0; i < checkedArray.length; i++) {
+    for (var i = 0; i < 5; i++) {
       window.pin.render(checkedArray[i]);
     }
   }));

@@ -28,7 +28,7 @@
     xhr.open('GET', URL_GET);
     xhr.send();
   };
-  var sendForm = function (onSuccess, onError) {
+  var sendForm = function (data, onSuccess, onError) {
     var xhr = setSettings(onError);
     xhr.addEventListener('load', function () {
       if (xhr.status === GOOD_STATUS) {
@@ -38,7 +38,7 @@
       }
     });
     xhr.open('POST', URL_POST);
-    xhr.send(new FormData(window.form.mainForm));
+    xhr.send();
   };
   window.backend = {
     onLoad: getCustomers,
